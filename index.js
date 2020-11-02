@@ -1,16 +1,18 @@
-// array of questions for user
-const questions = [
+const fs = require('fs');
+const inquirer = require('inquirer');
+//const { Choices } = require("inquirer/lib/objects/choices.js");
+const { report } = require('process');
+const util = require('util');
+const generateMarkdown = require('./util/generateMarkdown');
+const promptUser = require('./util/promptUser');
 
-];
+const writeFileAsync = util.promisify(fs.writeFile);
 
-// function to write README file
-function writeToFile(fileName, data) {
-}
-
-// function to initialize program
-function init() {
-
-}
-
-// function call to initialize program
-init();
+promptUser().then(function(data) {
+    const markdown = generateMarkdown(data);
+    return writeFileAsync("./generated/generatedREADME.md", markdown);
+}).then(function () {
+    console.log('Generating README.md ...');
+    }).catch(function(err){
+        console.log(err);
+    })
